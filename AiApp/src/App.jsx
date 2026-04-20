@@ -1,4 +1,3 @@
-import "./App.css";
 import AIApp from "./components/AIAPP";
 function App() {
   return (
