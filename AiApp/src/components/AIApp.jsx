@@ -17,25 +17,21 @@ function AIApp() {
       setLoading(true);
       setError("");
 
-      const res = await fetch(
-        "https://api-inference.huggingface.co/models/gpt2",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_HF_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            inputs: input,
-          }),
+      const res = await fetch("http://localhost:5000/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          input: input,
+        }),
+      });
 
       const data = await res.json();
 
-      // extract response AFTER getting data
-      const rawText = data[0]?.generated_text || "";
-      const responseText = rawText.replace(input, "").trim();
+      const responseText =
+        data[0]?.generated_text || data.generated_text || "No response";
+      // const responseText = rawText.replace(input, "").trim();
       // update history AFTER response
       setHistory((prev) => [
         ...prev,
