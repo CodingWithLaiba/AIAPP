@@ -1,4 +1,4 @@
-import AIApp from "./components/AIAPP";
+import AIApp from "./components/AIApp.jsx";
 function App() {
   return (
     <>
