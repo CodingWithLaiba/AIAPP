@@ -6,38 +6,42 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+  }),
+);
 app.use(express.json());
 
-app.post("/api/ai", async (req, res) => {
+app.post("/", async (req, res) => {
+  console.log(req, res);
   try {
-    const userInput = req.body.input;
-
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill",
+      "https://api-inference.huggingface.co/hf/v1/chat/completions",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${process.env.HF_TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          inputs: userInput,
-          options: { wait_for_model: true },
-        }),
-      }
+        body: JSON.stringify(req.body),
+      },
     );
-
     const text = await response.text();
+    console.log("RAW HF RESPONSE:", text);
 
-    if (!response.ok) {
-      console.log("RAW ERROR:", text);
-      return res.status(500).json({ error: "API failed" });
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      return res.status(500).json({
+        error: "Invalid JSON from HF",
+        raw: text,
+      });
     }
 
-    const data = JSON.parse(text);
-
     res.json(data);
+    console.log("API RESPONSE:", data);
   } catch (error) {
     console.error("SERVER ERROR:", error);
     res.status(500).json({ error: "Something went wrong" });
