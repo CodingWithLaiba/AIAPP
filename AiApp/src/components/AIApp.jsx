@@ -17,16 +17,20 @@ function AIApp() {
       setLoading(true);
       setError("");
 
-      const res = await fetch("http://localhost:5000/api/ai", {
+      const res = await fetch("http://localhost:5000/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          input: input,
+          model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+          messages: [{ role: "user", content: input }],
         }),
       });
 
+
+      console.log("RAW RESPONSE:", res);
+      return
       const data = await res.json();
 
       const responseText =
