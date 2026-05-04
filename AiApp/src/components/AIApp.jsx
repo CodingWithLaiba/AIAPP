@@ -7,44 +7,53 @@ function AIApp() {
   const [history, setHistory] = useState([]);
 
   const bottomRef = useRef(null);
-  const handlesubmit = async () => {
-    if (!input) {
-      setError("Please enter something");
-      return;
-    }
+  const handlesubmit = async (prompt) => {
+    console.log(prompt);
+    if (!prompt.trim()) return;
+
+    setHistory((prev) => [
+      ...prev,
+      { role: "user", content: prompt, id: Date.now() },
+    ]);
+    setLoading(true);
+    setError(null);
 
     try {
-      setLoading(true);
-      setError("");
+      const token = import.meta.env.VITE_HF_TOKEN;
+      console.log(token);
+      if (!token)
+        throw new Error("Missing API token — add VITE_HF_TOKEN to .env");
 
-      const res = await fetch("http://localhost:5000/", {
+      const res = await fetch("/hf/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-          messages: [{ role: "user", content: input }],
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: 512,
         }),
       });
 
+      if (!res.ok) {
+        console.log("API ERROR:", res);
+        const body = await res.json().catch(() => null);
+        throw new Error(
+          `API error (${res.status}): ${body?.error || body?.message || res.statusText}`,
+        );
+      }
 
-      console.log("RAW RESPONSE:", res);
-      return
       const data = await res.json();
-
-      const responseText =
-        data[0]?.generated_text || data.generated_text || "No response";
-      // const responseText = rawText.replace(input, "").trim();
-      // update history AFTER response
+      const reply = data.choices?.[0]?.message?.content || "No response.";
+      console.log("API RESPONSE:", reply);
       setHistory((prev) => [
         ...prev,
-        { prompt: input, response: responseText },
+        { role: "assistant", content: reply, id: Date.now() + 1 },
       ]);
-
-      setInput("");
-    } catch {
-      setError("Something went wrong");
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -95,7 +104,10 @@ function AIApp() {
           }}
         />
         <button
-          onClick={handlesubmit}
+          onClick={() => {
+            handlesubmit(input);
+            setInput("");
+          }}
           className="bg-blue-500 px-3 text-white rounded"
         >
           {loading ? "Loading..." : "Send"}
