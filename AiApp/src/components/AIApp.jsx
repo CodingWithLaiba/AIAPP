@@ -74,20 +74,24 @@ function AIApp() {
           </p>
         )}
         {history.map((item, index) => (
-          <div key={index} className="space-y-2">
-            <div className="flex justify-end">
-              <div className="bg-blue-500 text-white max-w-xs p-3 rounded-lg">
-                {item.prompt}
-              </div>
-            </div>
+  <div key={index} className="space-y-2">
+    {item.role === "user" && (
+      <div className="flex justify-end">
+        <div className="bg-blue-500 text-white max-w-xs p-3 rounded-lg">
+          {item.content}
+        </div>
+      </div>
+    )}
 
-            <div className="flex justify-start">
-              <div className="bg-gray-200 text-black max-w-xs p-3 rounded-lg">
-                {item.response}
-              </div>
-            </div>
-          </div>
-        ))}
+    {item.role === "assistant" && (
+      <div className="flex justify-start">
+        <div className="bg-gray-200 text-black max-w-xs p-3 rounded-lg">
+          {item.content}
+        </div>
+      </div>
+    )}
+  </div>
+))}
 
         {/* AUTO SCROLL TARGET */}
         <div ref={bottomRef}></div>
@@ -100,7 +104,7 @@ function AIApp() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handlesubmit();
+            if (e.key === "Enter") handlesubmit(input);
           }}
         />
         <button
