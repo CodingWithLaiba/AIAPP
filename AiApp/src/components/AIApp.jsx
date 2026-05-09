@@ -80,20 +80,16 @@ function AIApp() {
   }, [history]);
 
   return (
-    <div className="h-screen bg-zinc-950 text-white flex flex-col">
+    <div className="flex justify-center items-center flex-col">
       {/* HEADER */}
-      <div className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">
+      <div className="border-b w-full border-zinc-800 px-6 py-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           AI Chat
         </h1>
-
-        <div className="text-sm text-zinc-400">
-          Powered by Hugging Face
-        </div>
       </div>
 
       {/* CHAT AREA */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="flex-1 overflow-y-auto px-4 py-6 w-3xl">
         <div className="max-w-4xl mx-auto space-y-6">
           {history.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center mt-32">
@@ -150,7 +146,7 @@ function AIApp() {
       </div>
 
       {/* INPUT AREA */}
-      <div className="border-t border-zinc-800 p-4 bg-zinc-950">
+      <div className="border-t border-zinc-800 p-4 bg-zinc-950 w-3xl">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
           <input
             type="text"
