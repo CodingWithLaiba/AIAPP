@@ -186,7 +186,7 @@ This project helped practice:
 
 ## 👩‍💻 Author
 
-Made with by Laiba
+Made by Laiba
 
 ---
 
