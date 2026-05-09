@@ -124,7 +124,7 @@ function AIApp() {
               }`}
             >
               <div
-                className={`max-w-[80%] px-5 py-4 rounded-3xl shadow-lg whitespace-pre-wrap break-words ${
+                className={`max-w-[80%] px-5 py-4 rounded-3xl shadow-lg whitespace-pre-wrap wrap-break-words ${
                   item.role === "user"
                     ? "bg-blue-600 text-white rounded-br-md"
                     : "bg-zinc-800 text-zinc-100 rounded-bl-md"
