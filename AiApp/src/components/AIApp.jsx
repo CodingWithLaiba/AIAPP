@@ -82,7 +82,7 @@ function AIApp() {
   return (
     <div className="flex justify-center items-center flex-col">
       {/* HEADER */}
-      <div className="border-b w-full border-zinc-800 px-6 py-4 flex items-center justify-between">
+      <div className="border-b w-3xl border-zinc-800 px-6 py-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight text-white">
           AI Chat
         </h1>
